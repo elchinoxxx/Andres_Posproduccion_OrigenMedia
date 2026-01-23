@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Estratégica - Origen Media para Freshbox</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        origen: {
+                            navy: '#182236',    // Azul Freshbox Oficial
+                            gold: '#C5A063',    // Dorado Origen Media
+                            freshGold: '#C1AE72', // Dorado Freshbox Oficial
+                            light: '#F8FAFC',
+                            accent: '#2563EB'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -10px rgba(24, 34, 54, 0.1)',
+                        'glow': '0 0 20px rgba(197, 160, 99, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #182236;
+            overflow-x: hidden;
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #182236 0%, #C5A063 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card-pro {
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-pro:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(197, 160, 99, 0.15);
+            border-color: #C5A063;
+        }
+        .profile-image-container {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Gallery Styles */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 10;
+        }
+        
+        /* Parallax Section */
+        .parallax-section {
+            background-image: url('https://media.discordapp.net/attachments/1020791454852984863/1464075922071359725/Thumbnail_4-thumbnail.jpg?ex=69742675&is=6972d4f5&hm=6b7a031ebf7be07e90acd3052ae159731bc781bf4fafd8ba6d42283cd97a25df&=&format=webp&width=1423&height=800');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        /* Mobile adjustments for parallax */
+        @media (max-width: 768px) {
+            .parallax-section {
+                background-attachment: scroll; /* Better performance on mobile */
+                background-position: center;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-origen-light">
+
+    <!-- NAV -->
+    <nav class="fixed w-full z-50 nav-glass">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- LOGO ORIGEN MEDIA (Brandeado) -->
+                <div class="flex items-center gap-2">
+                    <img src="https://cdn.discordapp.com/attachments/1453109798034870317/1464064576806191209/42d2df81-5a0f-472a-9845-024db44cb416-removebg-preview.png?ex=69741be4&is=6972ca64&hm=879b29433434079872898797982348729384729" 
+                         alt="Origen Media Logo" 
+                         class="h-10 md:h-12 w-auto object-contain"
+                         onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex';">
+                    
+                    <!-- Fallback CSS Logo -->
+                    <div id="fallback-logo" class="hidden items-center gap-2">
+                        <div class="w-8 h-8 rounded-full border-4 border-origen-gold border-r-transparent rotate-45"></div>
+                        <div class="flex flex-col">
+                            <span class="text-lg font-bold tracking-widest text-origen-navy leading-none font-serif">ORIGEN</span>
+                            <span class="text-sm tracking-widest text-gray-500 leading-none">MEDIA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-[10px] md:text-xs tracking-[0.2em] font-bold text-origen-gold hidden md:block uppercase">
+                Trace · Time · Context
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="min-h-screen flex items-center justify-center relative bg-white overflow-hidden pt-24 md:pt-20 pb-16 md:pb-0">
+        <!-- Decoración Sutil -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-origen-light to-transparent skew-x-12 transform translate-x-20 opacity-50 pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10" data-aos="fade-up" data-aos-duration="1500">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-origen-navy text-white rounded-full text-xs font-bold tracking-widest uppercase mb-6 md:mb-8 shadow-lg">
+                <span class="w-2 h-2 bg-origen-gold rounded-full animate-pulse"></span>
+                Post-Producción 2026
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 md:mb-8 leading-tight text-origen-navy">
+                Ingeniería de <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-origen-navy via-origen-gold to-origen-navy">Edición & Volumen</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-medium mb-8 md:mb-12 leading-relaxed px-4 md:px-0">
+                Soy el brazo operativo de Origen Media. Transformo la visión de Freshbox en activos visuales de alto impacto mediante un sistema de <strong class="text-origen-navy">post-producción industrial</strong> y narrativa humana.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4 px-4 sm:px-0">
+                <a href="#vision" class="px-8 py-4 bg-origen-navy text-white font-bold rounded-lg hover:bg-origen-gold hover:text-white transition-all duration-300 shadow-soft transform hover:-translate-y-1 text-center">
+                    Ver Sinergia
+                </a>
+                <a href="#perfil" class="px-8 py-4 bg-white text-origen-navy border border-gray-200 font-bold rounded-lg hover:border-origen-navy transition-all duration-300 text-center">
+                    Perfil Técnico
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- SINERGIA FRESHBOX -->
+    <section id="vision" class="py-16 md:py-24 bg-white relative border-b border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <span class="text-origen-gold font-bold uppercase tracking-widest text-sm mb-2 block">Respaldo Institucional</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-origen-navy">La Filosofía Origen Media</h2>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto text-sm md:text-base">Agencia Híbrida de Marketing, Publicidad y RR.PP.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <div class="bg-origen-light p-6 md:p-10 rounded-2xl border border-gray-100 relative shadow-sm">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-origen-navy rounded-l-2xl"></div>
+                        <h3 class="text-xl md:text-2xl font-bold text-origen-navy mb-4 md:mb-6">El Respaldo Estratégico</h3>
+                        <p class="text-gray-600 mb-4 md:mb-6 leading-relaxed text-base md:text-lg">
+                            Como parte del equipo de <strong>Origen Media</strong>, traigo conmigo el ADN de una agencia disruptiva. Entendemos que la publicidad es para vender, el marketing es la herramienta y las relaciones públicas fortalecen el mensaje.
+                        </p>
+                        <p class="text-gray-600 mb-6 leading-relaxed text-base md:text-lg">
+                            En Origen Media, somos <strong>"Original Humans"</strong>. No buscamos competir ciegamente en redes sociales olvidando la esencia del producto. Hacemos publicidad con sentido humano y contenido de valor real.
+                        </p>
+                        <p class="text-origen-navy font-bold text-base md:text-lg border-l-4 border-origen-gold pl-4 italic">
+                            "Mi rol es aplicar esta metodología de diagnóstico profundo en Freshbox. Detectar por qué el contenido no conecta y aplicar soluciones de raíz, respaldado por la visión estratégica de Origen Media."
+                        </p>
+                    </div>
+                </div>
+                <div data-aos="fade-left" class="mt-8 lg:mt-0">
+                    <div class="grid gap-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-origen-navy text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-scissors"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-origen-navy">Precisión Técnica</h4>
+                                <p class="text-sm text-gray-500">Cada corte, cada transición y cada ajuste de color tiene un propósito narrativo. No edito por editar, edito para retener.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-origen-navy text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-layer-group"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-origen-navy">Capacidad de Volumen</h4>
+                                <p class="text-sm text-gray-500">Mi infraestructura está diseñada para manejar grandes volúmenes de material sin sacrificar el detalle artesanal.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-origen-navy text-white rounded-lg flex items-center justify-center flex-shrink-0 text-xl"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <div>
+                                <h4 class="font-bold text-lg text-origen-navy">Acabado Visual</h4>
+                                <p class="text-sm text-gray-500">Color grading, diseño sonoro y motion graphics que elevan la percepción de marca de Freshbox.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERFIL TÉCNICO -->
+    <section id="perfil" class="py-16 md:py-24 bg-origen-light relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                <!-- Columna Izquierda: Información -->
+                <div class="lg:w-1/2" data-aos="fade-right">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="h-px w-12 bg-origen-gold"></div>
+                        <span class="text-origen-gold font-bold uppercase tracking-widest text-sm">El Perfil Técnico</span>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8 text-center sm:text-left">
+                        <div class="profile-image-container flex-shrink-0 w-28 h-28">
+                             <img src="https://media.discordapp.net/attachments/1020791454852984863/1464075922465493013/unnamed_1.jpg?ex=69742675&is=6972d4f5&hm=9588beaf0c4237673f7f16587309c341343bcc15c127b3d78252fdc276e5b9bd&=&format=webp&width=680&height=680" 
+                                 alt="Andrés David" 
+                                 class="w-full h-full object-cover rounded-full shadow-lg">
+                        </div>
+                        <div class="mt-2 sm:mt-0">
+                            <h3 class="text-3xl font-bold text-origen-navy">Andrés David</h3>
+                            <span class="text-gray-500 font-medium text-lg block">Lead Post-Producer & Editor</span>
+                        </div>
+                    </div>
+
+                    <div class="prose prose-lg text-gray-600 mb-8 text-center sm:text-justify">
+                        <p class="mb-4">
+                            <strong class="text-origen-navy">7 años de experiencia en Post-Producción.</strong> Me especializo en la edición técnica y narrativa para mercados exigentes.
+                        </p>
+                        <p class="mb-4">
+                            No solo edito; dirijo. He liderado equipos multidisciplinarios (editores, diseñadores, guionistas y locutores) para canales automatizados, logrando hitos de producción como la entrega de <strong class="text-origen-navy">240 Reels en una sola campaña</strong>.
+                        </p>
+                        <p class="mb-4">
+                            He colaborado con <strong class="text-origen-navy">creadores de contenido masivos y de nicho</strong>, así como en producciones profesionales y no profesionales. Esta versatilidad me permite entender qué funciona en cada ecosistema y adaptar la narrativa para conectar con cualquier audiencia.
+                        </p>
+                        <p class="mb-4">
+                            Mi portafolio incluye la producción de <strong>comerciales publicitarios para el mercado estadounidense (USA)</strong>, operando bajo estrictos estándares de confidencialidad (NDA).
+                        </p>
+                        <p>
+                            Además, tengo "skin in the game": <strong>monetizo mis propios activos digitales (Facebook)</strong> y cazo tendencias diariamente, lo que me da una sensibilidad única sobre qué tipo de edición genera retención real.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center sm:justify-start gap-3 mb-10">
+                        <!-- Badges with responsive text size -->
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-solid fa-users-gear text-origen-gold mr-2"></i>Liderazgo</span>
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-solid fa-layer-group text-origen-gold mr-2"></i>Volumen Masivo</span>
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-solid fa-tv text-origen-gold mr-2"></i>US Commercials</span>
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-solid fa-fire text-origen-gold mr-2"></i>Trend Hunter</span>
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-brands fa-facebook text-origen-gold mr-2"></i>Monetización Propia</span>
+                        <span class="px-3 py-2 bg-white text-origen-navy rounded-md text-xs md:text-sm font-bold border border-gray-200 shadow-sm"><i class="fa-solid fa-users text-origen-gold mr-2"></i>Multi-Nicho</span>
+                    </div>
+
+                    <!-- Tech Stack Minimal -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-gray-200 pt-8">
+                        <div class="text-center group cursor-pointer p-2">
+                            <i class="fa-solid fa-film text-2xl text-gray-400 group-hover:text-origen-navy transition-colors mb-2"></i>
+                            <div class="text-xs font-bold text-gray-500">PREMIERE PRO</div>
+                        </div>
+                        <div class="text-center group cursor-pointer p-2">
+                            <i class="fa-solid fa-cloud text-2xl text-gray-400 group-hover:text-origen-navy transition-colors mb-2"></i>
+                            <div class="text-xs font-bold text-gray-500">CREATIVE CLOUD</div>
+                        </div>
+                        <div class="text-center group cursor-pointer p-2">
+                            <i class="fa-solid fa-layer-group text-2xl text-gray-400 group-hover:text-origen-navy transition-colors mb-2"></i>
+                            <div class="text-xs font-bold text-gray-500">AFTER FX</div>
+                        </div>
+                        <div class="text-center group cursor-pointer p-2">
+                            <i class="fa-solid fa-robot text-2xl text-gray-400 group-hover:text-origen-navy transition-colors mb-2"></i>
+                            <div class="text-xs font-bold text-gray-500">AI TOOLS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Tarjeta Flotante -->
+                <div class="lg:w-1/2 w-full" data-aos="fade-left">
+                    <div class="bg-origen-navy text-white p-8 md:p-10 rounded-2xl shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-origen-gold/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+                        
+                        <h4 class="text-xl md:text-2xl font-bold mb-8 border-b border-white/10 pb-6">ADN de Edición</h4>
+                        
+                        <div class="space-y-8 relative z-10">
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-origen-gold text-xl flex-shrink-0">
+                                    <i class="fa-solid fa-chess-knight"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-1">Estructura Narrativa</h5>
+                                    <p class="text-gray-300 text-sm leading-relaxed">No solo corto clips; estructuro historias. Si el material crudo está desordenado, yo le doy sentido y flujo.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-origen-gold text-xl flex-shrink-0">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-1">Ritmo y Retención</h5>
+                                    <p class="text-gray-300 text-sm leading-relaxed">Edición dinámica diseñada para mantener la atención del usuario en los primeros segundos críticos.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center text-origen-gold text-xl flex-shrink-0">
+                                    <i class="fa-solid fa-rocket"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-lg mb-1">Velocidad de Entrega</h5>
+                                    <p class="text-gray-300 text-sm leading-relaxed">Flujos optimizados para entregas rápidas sin comprometer la calidad final.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESTRATEGIA (Grid Moderno) -->
+    <section id="estrategia" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+                <span class="text-origen-gold font-bold uppercase tracking-widest text-sm mb-2 block">El Plan de Producción</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-origen-navy mb-4">Ecosistema de Contenido</h2>
+                <p class="text-gray-600 text-base md:text-lg">Objetivo claro: Producción masiva con calidad (+100 Piezas Mensuales)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- YouTube -->
+                <div class="card-pro rounded-xl p-8 group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-red-600 text-4xl mb-6 group-hover:scale-110 transition duration-300"><i class="fa-brands fa-youtube"></i></div>
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Formato Largo</div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-origen-navy mb-1">2 - 5</div>
+                    <div class="text-sm font-bold text-gray-500 mb-4">Videos / Mes</div>
+                    <p class="text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Edición profunda, narrativa y retención a largo plazo.
+                    </p>
+                </div>
+
+                <!-- TikTok -->
+                <div class="card-pro rounded-xl p-8 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-black text-4xl mb-6 group-hover:scale-110 transition duration-300"><i class="fa-brands fa-tiktok"></i></div>
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Vertical Rápido</div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-origen-navy mb-1">60</div>
+                    <div class="text-sm font-bold text-gray-500 mb-4">Videos / Mes</div>
+                    <p class="text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Cortes rápidos y dinámicos para consumo viral.
+                    </p>
+                </div>
+
+                <!-- Reels -->
+                <div class="card-pro rounded-xl p-8 group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-pink-600 text-4xl mb-6 group-hover:scale-110 transition duration-300"><i class="fa-brands fa-instagram"></i></div>
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Estética</div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-origen-navy mb-1">30</div>
+                    <div class="text-sm font-bold text-gray-500 mb-4">Reels / Mes</div>
+                    <p class="text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Edición pulida con enfoque en la estética visual.
+                    </p>
+                </div>
+
+                <!-- Stories -->
+                <div class="card-pro rounded-xl p-8 group" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-yellow-500 text-4xl mb-6 group-hover:scale-110 transition duration-300"><i class="fa-solid fa-circle-notch"></i></div>
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Retención</div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-origen-navy mb-1">60+</div>
+                    <div class="text-sm font-bold text-gray-500 mb-4">Piezas / Mes</div>
+                    <p class="text-gray-600 text-sm leading-relaxed border-t border-gray-100 pt-4">
+                        Adaptación de formatos para presencia diaria.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METODOLOGIA (Timeline Clean) -->
+    <section class="py-16 md:py-24 bg-origen-light relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
+                <span class="text-origen-gold font-bold uppercase tracking-widest text-sm mb-2 block">Workflow Técnico</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-origen-navy">Metodología "Edición Fugaz"</h2>
+            </div>
+
+            <div class="relative max-w-5xl mx-auto">
+                <!-- Linea Central (Hidden on mobile) -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-px bg-gray-300 hidden md:block"></div>
+
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 relative" data-aos="fade-up">
+                    <div class="md:w-5/12 text-center md:text-right pr-0 md:pr-12 mb-6 md:mb-0">
+                        <h4 class="text-xl md:text-2xl font-bold text-origen-navy mb-2">1. Ingesta & Batch</h4>
+                        <p class="text-gray-600 text-sm md:text-base">Recepción de material en bloque (5 videos largos). Organización de proyecto y proxys para velocidad.</p>
+                    </div>
+                    <div class="w-12 h-12 bg-origen-navy text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg z-10 border-4 border-white">1</div>
+                    <div class="md:w-5/12 pl-0 md:pl-12 hidden md:block"></div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 relative" data-aos="fade-up">
+                    <div class="md:w-5/12 order-2 md:order-1 hidden md:block"></div>
+                    <div class="w-12 h-12 bg-white text-origen-navy border-2 border-origen-navy rounded-full flex items-center justify-center font-bold text-xl shadow-lg z-10 order-1 md:order-2 mb-6 md:mb-0">2</div>
+                    <div class="md:w-5/12 text-center md:text-left pl-0 md:pl-12 order-3">
+                        <h4 class="text-xl md:text-2xl font-bold text-origen-navy mb-2">2. Procesamiento IA</h4>
+                        <p class="text-gray-600 text-sm md:text-base">Ingesta inmediata. Uso de algoritmos para pre-corte, transcripción y selección de clips.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 relative" data-aos="fade-up">
+                    <div class="md:w-5/12 text-center md:text-right pr-0 md:pr-12 mb-6 md:mb-0">
+                        <h4 class="text-xl md:text-2xl font-bold text-origen-navy mb-2">3. Post-Producción</h4>
+                        <p class="text-gray-600 text-sm md:text-base">Color grading, mezcla de audio, gráficos y efectos visuales para dar el acabado profesional.</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white text-origen-navy border-2 border-origen-navy rounded-full flex items-center justify-center font-bold text-xl shadow-lg z-10 border-4 border-white">3</div>
+                    <div class="md:w-5/12 pl-0 md:pl-12 hidden md:block"></div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col md:flex-row items-center justify-between relative" data-aos="fade-up">
+                    <div class="md:w-5/12 order-2 md:order-1 hidden md:block"></div>
+                    <div class="w-12 h-12 bg-origen-gold text-white rounded-full flex items-center justify-center font-bold text-xl shadow-lg z-10 order-1 md:order-2 mb-6 md:mb-0 border-4 border-white">4</div>
+                    <div class="md:w-5/12 text-center md:text-left pl-0 md:pl-12 order-3">
+                        <h4 class="text-xl md:text-2xl font-bold text-origen-navy mb-2">4. Render & Buffer</h4>
+                        <p class="text-gray-600 text-sm md:text-base">Exportación optimizada y entrega con 8 días de antelación para asegurar continuidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN CINEMATOGRÁFICA (Visual Break) -->
+    <section class="relative py-32 md:py-48 bg-fixed bg-center bg-cover parallax-section" data-aos="zoom-in">
+        <div class="absolute inset-0 bg-origen-navy/60"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-4xl md:text-7xl font-bold text-white mb-6 font-serif leading-tight">
+                Estándar <span class="text-origen-gold italic">Cinematográfico</span>
+            </h2>
+            <div class="w-16 md:w-24 h-1 bg-white mx-auto mb-6 md:mb-8"></div>
+            <p class="text-xl md:text-2xl text-white/90 font-light max-w-2xl mx-auto px-4">
+                Calidad visual de exportación para diferenciarte en un mar de contenido genérico.
+            </p>
+        </div>
+    </section>
+
+    <!-- INFRAESTRUCTURA Y FONDOS -->
+    <section class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl font-bold text-origen-navy mb-4">Infraestructura Técnica</h2>
+                <p class="text-gray-500">El cliente no paga licencias extra. Yo pongo la fábrica de postproducción.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
+                <div class="p-6 md:p-8 bg-origen-light rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-blue-600 text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-origen-navy mb-3">Blindaje Legal</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Licencias comerciales pagadas para Música, Stock y Fuentes. Garantía de monetización sin strikes.</p>
+                </div>
+                <div class="p-6 md:p-8 bg-origen-light rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-origen-navy text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-origen-navy mb-3">Stack de Software</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Suscripciones activas a Adobe Creative Cloud y herramientas de IA para optimización de flujos.</p>
+                </div>
+                <div class="p-6 md:p-8 bg-origen-light rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+                    <div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center text-origen-gold text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-origen-navy mb-3">Activos Visuales</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Acceso a librería privada de LUTs cinematográficos, Presets de animación y Plugins VFX.</p>
+                </div>
+            </div>
+
+            <!-- INVESTMENT NOTE (Financial Nudge) -->
+            <div class="max-w-4xl mx-auto bg-origen-navy text-white p-6 md:p-8 rounded-2xl shadow-xl relative overflow-hidden" data-aos="fade-up">
+                 <div class="absolute top-0 right-0 w-40 h-40 bg-origen-gold/20 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
+                 <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+                    <div class="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 bg-origen-gold rounded-full flex items-center justify-center text-origen-navy text-xl md:text-2xl font-bold">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg md:text-xl font-bold mb-2">Nota sobre Inversión y Herramientas</h4>
+                        <p class="text-gray-300 leading-relaxed mb-4 text-sm md:text-base">
+                            Mi flujo de trabajo base está optimizado con el ecosistema <strong class="text-white">Adobe Creative Cloud</strong>. Sin embargo, para proyectos que requieran un acabado de color de cine (DaVinci Studio) o integraciones avanzadas de IA (Gemini Advanced/ChatGPT Plus), podemos escalar la infraestructura técnica según el presupuesto asignado.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                            El contenido de alto impacto requiere fondos. Al igual que ustedes invierten en los mejores ingredientes para garantizar calidad, desbloquear herramientas premium garantiza resultados superiores.
+                        </p>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- SECURITY CLAUSE (Clean Style) -->
+            <div class="max-w-4xl mx-auto mt-8 border-l-4 border-gray-300 p-6 pl-8">
+                <div class="flex items-start gap-4">
+                    <i class="fa-solid fa-lock text-gray-400 mt-1 text-xl"></i>
+                    <div>
+                        <h4 class="text-gray-500 font-bold uppercase text-xs tracking-widest mb-1">Protocolo de Seguridad</h4>
+                        <p class="text-gray-400 text-sm italic">
+                            Las licencias de software, cuentas de IA y accesos a librerías son propiedad intransferible de Andrés David.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRACK RECORD (Gallery) -->
+    <section class="py-16 md:py-24 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12">
+                <div class="mb-4 md:mb-0">
+                    <span class="text-origen-gold font-bold uppercase tracking-widest text-sm mb-2 block">Track Record</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-origen-navy">Resultados Validados</h2>
+                </div>
+                <p class="text-gray-500 max-w-md text-left md:text-right italic text-sm md:text-base">
+                    "Los números no mienten. Aquí una muestra de la capacidad de impacto."
+                </p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4" data-aos="fade-up">
+                 <!-- Imagen 1: Estadísticas Verticales -->
+                 <div class="gallery-item lg:col-span-1 lg:row-span-2">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464069218323660840/image.png?ex=69742036&is=6972ceb6&hm=91e6fdd215575f92584ddbf924730877eaf91f3df734d8379676fadbf2cb6873&=&format=webp&quality=lossless&width=505&height=930" alt="Estadísticas de Alcance" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Imagen 2: Panel Grande -->
+                <div class="gallery-item col-span-2 lg:col-span-2">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464069601187856578/image.png?ex=69742092&is=6972cf12&hm=5efc94924cc6b29e1fa951dc42d05e08672bea908cbc358ca9c980af705ff18f&=&format=webp&quality=lossless&width=888&height=930" alt="Dashboard Monetización" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Imagen 3: Gráfica Azul -->
+                <div class="gallery-item">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464069731869786226/616172106_25687371897550458_5335338850715080632_n.png?ex=697420b1&is=6972cf31&hm=0ae29e9bcc87d7397d53d4323d859f1b659a62172b3a48cf1d5bbf51ea48ca7d&=&format=webp&quality=lossless&width=696&height=800" alt="Gráfica de Crecimiento" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Imagen 5: Celular Stats -->
+                <div class="gallery-item">
+                     <img src="https://media.discordapp.net/attachments/1020791454852984863/1464070420238962782/616816768_2061194291381170_1152847863052428870_n.png?ex=69742155&is=6972cfd5&hm=98750e86f1b893ed24b98bee92758bb1398b9e9405d1e5cbaedd9981fe6faa31&=&format=webp&quality=lossless&width=415&height=800" alt="Estadísticas Móviles" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Imagen 4: Wide Graph -->
+                <div class="gallery-item col-span-2 lg:col-span-2">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464069732192878725/618994630_25687389210882060_2828553070415216261_n.png?ex=697420b1&is=6972cf31&hm=f92edde2c3beb4b3083209555ba65028266d4eeab7d61be3e29764c16354fde1&=&format=webp&quality=lossless&width=1493&height=639" alt="Rendimiento de Video" class="w-full h-full object-cover">
+                </div>
+
+                 <!-- Imagen 6 -->
+                 <div class="gallery-item">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464070420507660288/616086746_2061194321381167_4444110826402131001_n.png?ex=69742155&is=6972cfd5&hm=2e40a56c32c74ef8870214ebed6dfd6974f7ac30f2f07d11c17631da8540550d&=&format=webp&quality=lossless&width=476&height=800" alt="Alcance Orgánico" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Imagen 7 -->
+                <div class="gallery-item">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464070420809515088/615827121_1417138256581439_8887733513452860970_n.png?ex=69742155&is=6972cfd5&hm=2f2ff493ff75312e37d72e456525be079f3d12f06ce9ec5f790e73a78c8d8004&=&format=webp&quality=lossless&width=674&height=800" alt="Resultados Ads" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Imagen 8 -->
+                <div class="gallery-item col-span-2 lg:col-span-2">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464070421123960883/616832834_1445720967347453_8582945072057632841_n.png?ex=69742155&is=6972cfd5&hm=fa924be9dfbf1cb7ae299f1980e51ab5d59fcab52f03ba7d2815e54f90079452&=&format=webp&quality=lossless&width=939&height=800" alt="Dashboard Resumen" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Imagen 9 -->
+                <div class="gallery-item lg:col-span-1">
+                    <img src="https://media.discordapp.net/attachments/1020791454852984863/1464070421455573094/619076614_2423977068052984_3061579237863736360_n.png?ex=69742155&is=6972cfd5&hm=5b862bb19e83bb6265019884cf4689c93e65cef7afd46de344414554737550ae&=&format=webp&quality=lossless&width=450&height=800" alt="Ingresos Estimados" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (Dark Contrast) -->
+    <footer class="bg-origen-navy text-white py-12 md:py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 md:mb-6">Listo para Escalar</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-8 md:mb-10 text-base md:text-lg">
+                Tengo la experiencia, la velocidad y la infraestructura. No busco solo editar, busco romper sus métricas actuales.
+            </p>
+            
+            <!-- Botón de WhatsApp funcional con número oculto -->
+            <a href="https://wa.me/5215632184700?text=Hola%20Andr%C3%A9s,%20vi%20tu%20propuesta%20para%20Freshbox%20y%20me%20interesa%20hablar%20de%20n%C3%BAmeros." 
+               target="_blank" 
+               class="inline-block w-full sm:w-auto px-10 py-4 bg-origen-gold text-origen-navy font-bold rounded-lg hover:bg-white transition-all duration-300 mb-12 md:mb-16 shadow-glow transform hover:-translate-y-1 no-underline">
+                <i class="fa-brands fa-whatsapp mr-2"></i> Hablemos de Números
+            </a>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+                <div class="uppercase tracking-widest mb-4 md:mb-0">Origen Media</div>
+                <div>&copy; 2026 Propuesta Confidencial. Desarrollada por Andrés David.</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
