@@ -19,9 +19,9 @@
                 extend: {
                     colors: {
                         origen: {
-                            navy: '#182236',    // Azul Freshbox Oficial / Navy Profundo
-                            gold: '#C5A063',    // Dorado Origen Media
-                            light: '#F8FAFC',   // Fondo claro limpio
+                            navy: '#182236',
+                            gold: '#C5A063',
+                            light: '#F8FAFC',
                             accent: '#2563EB',
                             whatsapp: '#25D366'
                         }
@@ -44,29 +44,35 @@
             color: #182236;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
         }
         
         .nav-glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0,0,0,0.05);
+            will-change: backdrop-filter;
         }
 
         .card-pro {
             background: white;
             border: 1px solid #f1f5f9;
             border-radius: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Eliminamos la transición genérica aquí para controlarla en scaling-card */
             position: relative;
             overflow: hidden;
             height: 100%;
             display: flex;
             flex-direction: column;
+            backface-visibility: hidden;
         }
-        .card-pro:hover {
-            transform: translateY(-8px);
+        /* Hover por defecto para otras tarjetas que no sean de precios */
+        .card-pro:not(.scaling-card):hover {
+            transform: translateY(-5px);
             box-shadow: 0 20px 40px -10px rgba(197, 160, 99, 0.15);
             border-color: #C5A063;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         
         .serif-title {
@@ -74,7 +80,7 @@
         }
 
         .team-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Elastic bounce */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         .team-card:hover {
@@ -86,26 +92,59 @@
         /* Modal Styles */
         .modal-overlay {
             background-color: rgba(24, 34, 54, 0.8);
-            backdrop-filter: blur(8px);
         }
         
-        /* Team Overlay (Menu Aparte) */
-        .team-overlay-screen {
-            background-color: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
+        #teamOverlay {
+            will-change: transform;
+            transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* --- ANIMACIONES DE PAQUETES (MODELOS DE ESCALAMIENTO) --- */
+        .scaling-card {
+            /* Transición "Guapa" con rebote */
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+            z-index: 1;
+            will-change: transform; /* Optimización GPU */
         }
-        ::-webkit-scrollbar-track {
-            background: #F8FAFC;
+
+        /* 1. Essential (Verde) */
+        .scaling-card.essential:hover {
+            transform: translateY(-20px) scale(1.02); /* Levanta fuerte */
+            z-index: 20;
+            border-color: #10B981; 
+            box-shadow: 0 0 0 2px #10B981, 0 30px 60px -15px rgba(16, 185, 129, 0.3);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #C5A063;
-            border-radius: 4px;
+
+        /* 2. Strategic (Azul - Central) */
+        /* Estado normal en desktop: ya está levantada (-1rem) */
+        @media (min-width: 768px) {
+            .scaling-card.strategic {
+                transform: translateY(-1rem); 
+            }
+            .scaling-card.strategic:hover {
+                transform: translateY(-2.5rem) scale(1.03); /* Sube aún más */
+                z-index: 20;
+                border-color: #2563EB; 
+                box-shadow: 0 0 0 2px #2563EB, 0 35px 70px -15px rgba(37, 99, 235, 0.35);
+            }
         }
-        
+        /* Mobile handling for Strategic */
+        @media (max-width: 767px) {
+            .scaling-card.strategic:hover {
+                transform: translateY(-20px) scale(1.02);
+                border-color: #2563EB; 
+                box-shadow: 0 0 0 2px #2563EB, 0 30px 60px -15px rgba(37, 99, 235, 0.3);
+            }
+        }
+
+        /* 3. Signature (Cian) */
+        .scaling-card.signature:hover {
+            transform: translateY(-20px) scale(1.02); /* Levanta fuerte */
+            z-index: 20;
+            border-color: #38BDF8; 
+            box-shadow: 0 0 0 2px #38BDF8, 0 30px 60px -15px rgba(56, 189, 248, 0.4);
+        }
+
         .cultural-role-list li {
             position: relative;
             padding-left: 1.25rem;
@@ -119,29 +158,30 @@
             font-weight: bold;
         }
 
-        /* Highlight classes for PR section */
+        /* Highlights */
         .text-highlight-red { color: #ef4444; font-weight: 700; }
         .text-highlight-gold { color: #C5A063; font-weight: 700; }
         .text-highlight-blue { color: #3b82f6; font-weight: 700; }
         .text-highlight-navy { color: #182236; font-weight: 700; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F8FAFC; }
+        ::-webkit-scrollbar-thumb { background: #C5A063; border-radius: 4px; }
     </style>
 </head>
-<body class="font-sans antialiased bg-origen-light">
+<body class="font-sans antialiased bg-origen-light relative" oncontextmenu="return false;">
 
     <!-- NAV -->
     <nav class="fixed w-full z-40 nav-glass">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-4">
-                    <!-- Freshbox (Primero) -->
-                    <span class="text-xl font-bold tracking-widest text-origen-navy leading-none serif-title border-r border-gray-300 pr-4">FRESHBOX</span>
-                    
-                    <!-- Origen Media (Segundo) -->
+                    <span class="text-lg md:text-xl font-bold tracking-widest text-origen-navy leading-none serif-title border-r border-gray-300 pr-2 md:pr-4">FRESHBOX</span>
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full border-4 border-origen-gold border-r-transparent rotate-45"></div>
+                        <div class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 md:border-4 border-origen-gold border-r-transparent rotate-45"></div>
                         <div class="flex flex-col">
-                            <span class="text-lg font-bold tracking-widest text-origen-navy leading-none serif-title">ORIGEN</span>
-                            <span class="text-sm tracking-widest text-gray-500 leading-none">MEDIA</span>
+                            <span class="text-sm md:text-lg font-bold tracking-widest text-origen-navy leading-none serif-title">ORIGEN</span>
+                            <span class="text-[10px] md:text-sm tracking-widest text-gray-500 leading-none">MEDIA</span>
                         </div>
                     </div>
                 </div>
@@ -150,7 +190,6 @@
                 <a href="#diagnostico" class="hover:text-origen-navy transition-colors">Diagnóstico</a>
                 <a href="#filosofia" class="hover:text-origen-navy transition-colors">Filosofía</a>
                 <a href="#cultura" class="hover:text-origen-navy transition-colors">Cultura</a>
-                <!-- Updated Nav Link -->
                 <button onclick="openTeamOverlay()" class="text-origen-gold hover:text-origen-navy transition-colors font-bold uppercase tracking-widest">Original Humans</button>
             </div>
         </div>
@@ -159,27 +198,22 @@
     <!-- HERO SECTION -->
     <header class="min-h-screen flex items-center justify-center relative bg-white overflow-hidden pt-20">
         <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-origen-light to-transparent skew-x-12 transform translate-x-40 opacity-60 pointer-events-none"></div>
-        
         <div class="container mx-auto px-6 text-center relative z-10" data-aos="fade-up" data-aos-duration="1500">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-origen-navy text-white rounded-full text-xs font-bold tracking-widest uppercase mb-8 shadow-xl">
                 <span class="w-2 h-2 bg-origen-gold rounded-full animate-pulse"></span>
                 Freshbox & Origen Media
             </div>
-            
             <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight text-origen-navy serif-title">
                 Regresar al <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-origen-navy via-origen-gold to-origen-navy">Origen</span>
             </h1>
-            
             <p class="text-lg md:text-2xl text-gray-600 max-w-3xl mx-auto font-medium mb-10 leading-relaxed italic font-serif">
                 "La publicidad perdió el rumbo cuando dejó de escuchar. <br> En Freshbox, no buscamos 'engagement', buscamos Comunidad."
             </p>
-            
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="#diagnostico" class="px-8 py-4 bg-origen-navy text-white font-bold rounded-lg hover:bg-origen-gold transition-all duration-300 shadow-soft transform hover:-translate-y-1">
                     Ver Diagnóstico
                 </a>
-                <!-- Updated Hero Button -->
                 <button onclick="openTeamOverlay()" class="px-8 py-4 bg-white text-origen-navy border border-gray-200 font-bold rounded-lg hover:border-origen-navy hover:bg-gray-50 transition-all duration-300 group">
                     Conocer Original Humans <i class="fa-solid fa-arrow-right ml-2 text-origen-gold group-hover:translate-x-1 transition-transform"></i>
                 </button>
@@ -194,38 +228,28 @@
                 <span class="text-origen-gold font-bold uppercase tracking-widest text-xs mb-2 block">Paso 1: Análisis</span>
                 <h2 class="text-3xl md:text-4xl font-bold text-origen-navy serif-title">Freshbox: El Diagnóstico</h2>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 <div class="card-pro p-8 border-l-4 border-l-red-400" data-aos="fade-right">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-lg">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500 text-lg"><i class="fa-solid fa-chart-line"></i></div>
                         <h3 class="text-xl font-bold text-origen-navy">Status Actual</h3>
                     </div>
                     <p class="text-gray-600 mb-6 leading-relaxed">
                         El promedio de likes y comentarios no refleja la calidad real del producto. Estamos "mostrando comida" pero no estamos "generando hambre". Las métricas actuales son números, no voces.
                     </p>
-                    <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
-                        <div class="bg-red-300 h-1.5 rounded-full" style="width: 25%"></div>
-                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2"><div class="bg-red-300 h-1.5 rounded-full" style="width: 25%"></div></div>
                     <span class="text-xs text-red-400 font-bold uppercase tracking-wider">Conexión Emocional Baja</span>
                 </div>
-
                 <div class="card-pro p-8 border-l-4 border-l-origen-gold bg-white relative" data-aos="fade-left">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-origen-gold/5 rounded-bl-full -mr-10 -mt-10"></div>
                     <div class="flex items-center gap-3 mb-4 relative z-10">
-                        <div class="w-10 h-10 rounded-full bg-origen-gold/20 flex items-center justify-center text-origen-navy text-lg">
-                            <i class="fa-solid fa-eye"></i>
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-origen-gold/20 flex items-center justify-center text-origen-navy text-lg"><i class="fa-solid fa-eye"></i></div>
                         <h3 class="text-xl font-bold text-origen-navy">La Visión Origen</h3>
                     </div>
                     <p class="text-gray-600 mb-6 leading-relaxed relative z-10">
                         Transformar la cuenta en un referente visual cinematográfico. Pasar de la venta agresiva al deseo sutil. Crear una narrativa donde Freshbox no sea solo una opción, sino <strong>la experiencia</strong>.
                     </p>
-                    <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2 relative z-10">
-                        <div class="bg-origen-gold h-1.5 rounded-full" style="width: 90%"></div>
-                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2 relative z-10"><div class="bg-origen-gold h-1.5 rounded-full" style="width: 90%"></div></div>
                     <span class="text-xs text-origen-gold font-bold uppercase tracking-wider relative z-10">Potencial de Marca Líder</span>
                 </div>
             </div>
@@ -239,30 +263,17 @@
                 <i class="fa-solid fa-quote-left text-4xl text-origen-gold/20 mb-6 block"></i>
                 <h2 class="text-4xl md:text-5xl font-bold text-origen-navy mb-4 serif-title">El Origen</h2>
             </div>
-            
             <div class="prose prose-lg mx-auto text-gray-600 leading-relaxed space-y-8 text-justify md:text-center" data-aos="fade-up">
-                <p class="text-xl md:text-2xl text-origen-navy font-serif italic font-medium">
-                    "En Origen Media creemos que la publicidad perdió el rumbo cuando dejó de escuchar."
-                </p>
-                <p>
-                    No nacimos para correr detrás de deadlines artificiales, métricas infladas o reportes que no representan a nadie. Aquí, las cosas salen cuando están listas. Cuando tienen sentido. Cuando generan impacto real.
-                </p>
-                <p>
-                    Analizamos conversaciones reales, comentarios con contexto, historias compartidas por usuarios que sienten, cuestionan y participan. <strong class="text-origen-navy">No vemos “engagement”, vemos personas.</strong>
-                </p>
-                <p>
-                    Origen Media existe para regresar a la esencia: a la razón por la que una marca fue creada, al problema que vino a resolver y a la solución que realmente mejora la vida de alguien.
-                </p>
+                <p class="text-xl md:text-2xl text-origen-navy font-serif italic font-medium">"En Origen Media creemos que la publicidad perdió el rumbo cuando dejó de escuchar."</p>
+                <p>No nacimos para correr detrás de deadlines artificiales, métricas infladas o reportes que no representan a nadie. Aquí, las cosas salen cuando están listas. Cuando tienen sentido. Cuando generan impacto real.</p>
+                <p>Analizamos conversaciones reales, comentarios con contexto, historias compartidas por usuarios que sienten, cuestionan y participan. <strong class="text-origen-navy">No vemos “engagement”, vemos personas.</strong></p>
+                <p>Origen Media existe para regresar a la esencia: a la razón por la que una marca fue creada, al problema que vino a resolver y a la solución que realmente mejora la vida de alguien.</p>
                 <div class="py-6 border-y border-gray-100 my-8">
                     <p class="font-bold text-origen-navy mb-2">Creemos en equipos sanos, procesos honestos y talento respetado.</p>
                     <p class="text-origen-gold italic">Creemos que si gana uno, ganamos todos.</p>
                 </div>
-                <p>
-                    Origen Media no es una agencia tradicional. Es una comunidad que cree que comunicar bien también es un acto de responsabilidad. <br>
-                    <strong>Regresar al origen no es retroceder. Es avanzar con conciencia.</strong>
-                </p>
+                <p>Origen Media no es una agencia tradicional. Es una comunidad que cree que comunicar bien también es un acto de responsabilidad. <br><strong>Regresar al origen no es retroceder. Es avanzar con conciencia.</strong></p>
             </div>
-
             <div class="mt-12 flex flex-col items-center justify-center">
                 <div class="w-16 h-16 bg-origen-navy text-white rounded-full flex items-center justify-center text-2xl mb-3 serif-title">H</div>
                 <h4 class="font-bold text-origen-navy text-lg">Harold Huerta</h4>
@@ -278,24 +289,14 @@
                 <div class="md:w-1/2" data-aos="fade-right">
                     <span class="text-origen-gold font-bold uppercase tracking-widest text-xs mb-2 block">Relaciones Humanas</span>
                     <h2 class="text-3xl md:text-4xl font-bold text-origen-navy mb-6 serif-title">Comunicación Honesta</h2>
-                    
                     <div class="space-y-6 text-gray-600 text-lg leading-relaxed font-serif">
-                        <p class="font-medium text-origen-navy">
-                            "Las relaciones públicas, cuando se hacen bien, no buscan exposición: buscan entendimiento."
-                        </p>
-                        <p class="text-base font-sans">
-                            Después de años trabajando con <span id="span-empatia" class="transition-all duration-300 p-1 rounded">marcas, medios y personas</span>, aprendí que la <span id="span-vinculo" class="transition-all duration-300 p-1 rounded">verdadera reputación</span> no se construye forzando mensajes, sino <span id="span-escucha" class="transition-all duration-300 p-1 rounded">escuchando con atención</span> y <span id="span-dialogo" class="transition-all duration-300 p-1 rounded">actuando con coherencia</span>.
-                        </p>
-                        <p class="text-base font-sans">
-                            Nuestro equipo no trabaja desde la prisa ni desde la simulación. Trabajamos desde la empatía, el criterio y el respeto por las personas que están del otro lado del mensaje.
-                        </p>
+                        <p class="font-medium text-origen-navy">"Las relaciones públicas, cuando se hacen bien, no buscan exposición: buscan entendimiento."</p>
+                        <p class="text-base font-sans">Después de años trabajando con <span id="span-empatia" class="transition-all duration-300 p-1 rounded">marcas, medios y personas</span>, aprendí que la <span id="span-vinculo" class="transition-all duration-300 p-1 rounded">verdadera reputación</span> no se construye forzando mensajes, sino <span id="span-escucha" class="transition-all duration-300 p-1 rounded">escuchando con atención</span> y <span id="span-dialogo" class="transition-all duration-300 p-1 rounded">actuando con coherencia</span>.</p>
+                        <p class="text-base font-sans">Nuestro equipo no trabaja desde la prisa ni desde la simulación. Trabajamos desde la empatía, el criterio y el respeto por las personas que están del otro lado del mensaje.</p>
                         <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-                            <p class="text-origen-navy font-bold text-sm italic">
-                                "Eso es lo que defendemos en Origen Media: comunicar con sentido, cuidar los vínculos y construir reputación desde la verdad."
-                            </p>
+                            <p class="text-origen-navy font-bold text-sm italic">"Eso es lo que defendemos en Origen Media: comunicar con sentido, cuidar los vínculos y construir reputación desde la verdad."</p>
                         </div>
                     </div>
-
                     <div class="mt-8 flex items-center gap-4">
                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-origen-gold text-lg shadow-sm border border-gray-100">N</div>
                         <div>
@@ -304,17 +305,16 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="md:w-1/2 grid grid-cols-2 gap-4" data-aos="fade-left">
                     <div class="card-pro p-6 text-center cursor-default hover:border-red-400" onmouseenter="highlightText('empatia', 'text-red-500')" onmouseleave="resetText('empatia')">
                         <i class="fa-regular fa-heart text-3xl text-red-400 mb-3 transition-transform duration-300 group-hover:scale-110"></i>
                         <h4 class="font-bold text-origen-navy">Empatía</h4>
                     </div>
-                    <div class="card-pro p-6 text-center mt-8 cursor-default hover:border-origen-gold" onmouseenter="highlightText('escucha', 'text-origen-gold')" onmouseleave="resetText('escucha')">
+                    <div class="card-pro p-6 text-center cursor-default hover:border-origen-gold" onmouseenter="highlightText('escucha', 'text-origen-gold')" onmouseleave="resetText('escucha')">
                         <i class="fa-solid fa-ear-listen text-3xl text-origen-gold mb-3 transition-transform duration-300 group-hover:scale-110"></i>
                         <h4 class="font-bold text-origen-navy">Escucha</h4>
                     </div>
-                    <div class="card-pro p-6 text-center -mt-8 cursor-default hover:border-blue-500" onmouseenter="highlightText('vinculo', 'text-blue-600')" onmouseleave="resetText('vinculo')">
+                    <div class="card-pro p-6 text-center cursor-default hover:border-blue-500" onmouseenter="highlightText('vinculo', 'text-blue-600')" onmouseleave="resetText('vinculo')">
                         <i class="fa-regular fa-handshake text-3xl text-blue-500 mb-3 transition-transform duration-300 group-hover:scale-110"></i>
                         <h4 class="font-bold text-origen-navy">Vínculo</h4>
                     </div>
@@ -327,17 +327,14 @@
         </div>
     </section>
 
-    <!-- 4. ORGANIGRAMA CULTURAL (NÚCLEOS) -->
+    <!-- 4. ORGANIGRAMA CULTURAL -->
     <section id="cultura" class="py-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16" data-aos="fade-up">
                 <span class="text-origen-gold font-bold uppercase tracking-widest text-xs mb-2 block">Estructura Viva · Centrada en Personas</span>
                 <h2 class="text-3xl md:text-4xl font-bold text-origen-navy serif-title">Organigrama Cultural</h2>
-                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">
-                    No habla de "quién manda", habla de cómo fluye el criterio, la creación y la responsabilidad humana.
-                </p>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">No habla de "quién manda", habla de cómo fluye el criterio, la creación y la responsabilidad humana.</p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Visión -->
                 <div class="card-pro p-8 border-t-4 border-t-origen-gold group" data-aos="fade-up">
@@ -349,11 +346,8 @@
                         <li>Cuida la esencia, la ética y el criterio.</li>
                         <li>Conecta marcas, personas y contexto cultural.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 Guardián del origen, no jefe de tareas.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 Guardián del origen, no jefe de tareas.</div>
                 </div>
-
                 <!-- Relaciones -->
                 <div class="card-pro p-8 border-t-4 border-t-pink-400 group" data-aos="fade-up" data-aos-delay="100">
                     <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-dove"></i></div>
@@ -364,11 +358,8 @@
                         <li>Traduce la causa de la marca en conversación pública.</li>
                         <li>Protege la coherencia entre lo que la marca dice y lo que hace.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 Las relaciones públicas como relaciones humanas.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 Las relaciones públicas como relaciones humanas.</div>
                 </div>
-
                 <!-- Producción -->
                 <div class="card-pro p-8 border-t-4 border-t-green-500 group" data-aos="fade-up" data-aos-delay="200">
                     <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-video"></i></div>
@@ -379,26 +370,20 @@
                         <li>Priorizar calidad, narrativa y contexto.</li>
                         <li>Producir contenido que tenga sentido antes que volumen.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 No producir por llenar feeds.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 No producir por llenar feeds.</div>
                 </div>
-
-                <!-- Investigación -->
+                <!-- Estética -->
                 <div class="card-pro p-8 border-t-4 border-t-blue-500 group" data-aos="fade-up" data-aos-delay="300">
-                    <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-magnifying-glass"></i></div>
-                    <h3 class="font-bold text-lg text-origen-navy mb-1">Núcleo de Investigación</h3>
+                    <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3 class="font-bold text-lg text-origen-navy mb-1">Estética & Casting</h3>
                     <p class="text-xs text-origen-gold font-bold uppercase mb-4">Valeria Melo</p>
                     <ul class="text-gray-600 text-sm leading-relaxed mb-6 space-y-2 cultural-role-list">
-                        <li>Escuchar antes de proponer.</li>
-                        <li>Analizar personas, no solo data.</li>
-                        <li>Interpretar comentarios como voces, no métricas.</li>
+                        <li>Dirección de arte y styling en set.</li>
+                        <li>Selección de talento (Casting) alineado a marca.</li>
+                        <li>Supervisión de la estética visual en producción.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 Sin investigación no hay estrategia.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 La imagen comunica identidad.</div>
                 </div>
-
                 <!-- Post -->
                 <div class="card-pro p-8 border-t-4 border-t-origen-navy group" data-aos="fade-up" data-aos-delay="400">
                     <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
@@ -409,11 +394,8 @@
                         <li>Cuidar el detalle como parte del mensaje.</li>
                         <li>Convertir ideas en piezas humanas y memorables.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 La edición también comunica valores.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 La edición también comunica valores.</div>
                 </div>
-
                 <!-- AI -->
                 <div class="card-pro p-8 border-t-4 border-t-purple-500 group" data-aos="fade-up" data-aos-delay="500">
                     <div class="text-3xl text-origen-navy mb-4"><i class="fa-solid fa-microchip"></i></div>
@@ -424,56 +406,36 @@
                         <li>Acelerar procesos sin perder intención.</li>
                         <li>Evitar automatizar lo que debe sentirse.</li>
                     </ul>
-                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">
-                        👉 AI al servicio de las personas.
-                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-100 text-xs font-bold text-origen-navy italic">👉 AI al servicio de las personas.</div>
                 </div>
             </div>
-
-            <!-- Como Funciona (Rediseñado Visualmente) -->
+            
+            <!-- Proceso Visual -->
             <div class="mt-24 pt-16 border-t border-gray-100" data-aos="fade-up">
                 <div class="text-center mb-12">
                     <span class="text-origen-gold font-bold uppercase tracking-widest text-xs">El Proceso</span>
                     <h3 class="text-2xl font-bold text-origen-navy serif-title mt-2">Flujo de Trabajo Origen</h3>
                 </div>
-
                 <div class="relative">
-                    <!-- Connecting Line (Desktop) -->
                     <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></div>
-
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-                        <!-- Step 1: Misión -->
                         <div class="flex flex-col items-center text-center group">
-                            <div class="w-16 h-16 rounded-full bg-white border-2 border-origen-gold flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:bg-origen-gold group-hover:text-white transition-all duration-300 transform group-hover:scale-110">
-                                <i class="fa-solid fa-bullseye"></i>
-                            </div>
+                            <div class="w-16 h-16 rounded-full bg-white border-2 border-origen-gold flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:bg-origen-gold group-hover:text-white transition-all duration-300 transform group-hover:scale-110"><i class="fa-solid fa-bullseye"></i></div>
                             <h4 class="font-bold text-origen-navy mb-1">Misión</h4>
                             <p class="text-xs text-gray-500">El punto de partida.</p>
                         </div>
-
-                        <!-- Step 2: Visión -->
                         <div class="flex flex-col items-center text-center group">
-                            <div class="w-16 h-16 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:border-origen-gold group-hover:text-origen-gold transition-all duration-300 transform group-hover:scale-110">
-                                <i class="fa-regular fa-eye"></i>
-                            </div>
+                            <div class="w-16 h-16 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:border-origen-gold group-hover:text-origen-gold transition-all duration-300 transform group-hover:scale-110"><i class="fa-regular fa-eye"></i></div>
                             <h4 class="font-bold text-origen-navy mb-1">Visión</h4>
                             <p class="text-xs text-gray-500">La dirección clara.</p>
                         </div>
-
-                        <!-- Step 3: Creación -->
                         <div class="flex flex-col items-center text-center group">
-                            <div class="w-16 h-16 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:border-origen-gold group-hover:text-origen-gold transition-all duration-300 transform group-hover:scale-110">
-                                <i class="fa-solid fa-pen-nib"></i>
-                            </div>
+                            <div class="w-16 h-16 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center text-origen-navy text-2xl mb-4 shadow-sm group-hover:border-origen-gold group-hover:text-origen-gold transition-all duration-300 transform group-hover:scale-110"><i class="fa-solid fa-pen-nib"></i></div>
                             <h4 class="font-bold text-origen-navy mb-1">Creación</h4>
                             <p class="text-xs text-gray-500">Materializar la idea.</p>
                         </div>
-
-                        <!-- Step 4: Impacto Humano -->
                         <div class="flex flex-col items-center text-center group">
-                            <div class="w-16 h-16 rounded-full bg-origen-navy flex items-center justify-center text-origen-gold text-2xl mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <i class="fa-solid fa-heart"></i>
-                            </div>
+                            <div class="w-16 h-16 rounded-full bg-origen-navy flex items-center justify-center text-origen-gold text-2xl mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300"><i class="fa-solid fa-heart"></i></div>
                             <h4 class="font-bold text-origen-navy mb-1">Impacto Humano</h4>
                             <p class="text-xs text-gray-500">El resultado final.</p>
                         </div>
@@ -483,7 +445,7 @@
         </div>
     </section>
 
-    <!-- 5. ECOSISTEMA DE CONTENIDO -->
+    <!-- 5. ECOSISTEMA DE CONTENIDO & PAQUETES -->
     <section class="py-24 bg-origen-light border-y border-gray-100">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -492,10 +454,9 @@
                 <p class="text-gray-500 mt-2 max-w-2xl mx-auto">Estructuras de contenido diseñadas para diferentes etapas de madurez digital y dominio de mercado.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
-                
-                <!-- TIER 1: ESSENTIAL (Recuperado) -->
-                <div class="card-pro p-8 flex flex-col h-full border-t-4 border-t-gray-300" data-aos="fade-up" data-aos-delay="0">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+                <!-- TIER 1: ESSENTIAL -->
+                <div class="card-pro scaling-card essential p-8 flex flex-col h-full border-t-4 border-t-gray-300" data-aos="fade-up" data-aos-delay="0">
                     <h3 class="text-2xl font-bold text-origen-navy mb-2 serif-title">Essential</h3>
                     <p class="text-xs text-gray-400 uppercase tracking-widest mb-6">Mantenimiento de Relevancia</p>
                     <div class="mb-8 pb-8 border-b border-gray-100">
@@ -509,11 +470,10 @@
                     </ul>
                 </div>
 
-                <!-- TIER 2: STRATEGIC (Recomendado & Actualizado) -->
-                <div class="card-pro p-8 flex flex-col h-full border-2 border-origen-gold relative transform md:-translate-y-4 shadow-xl z-10 bg-white" data-aos="fade-up" data-aos-delay="100">
+                <!-- TIER 2: STRATEGIC -->
+                <div class="card-pro scaling-card strategic p-8 flex flex-col h-full border-2 border-origen-gold relative z-10 bg-white" data-aos="fade-up" data-aos-delay="100">
                     <div class="absolute top-0 inset-x-0 h-1 bg-origen-gold"></div>
                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-origen-gold text-white text-[10px] font-bold px-4 py-1 uppercase tracking-widest rounded-full shadow-md">Recomendado</div>
-                    
                     <h3 class="text-3xl font-bold text-origen-navy mb-2 serif-title">Strategic</h3>
                     <p class="text-xs text-origen-gold uppercase tracking-widest mb-6 font-bold">Crecimiento Agresivo</p>
                     <div class="mb-8 pb-8 border-b border-gray-100">
@@ -528,8 +488,8 @@
                     </ul>
                 </div>
 
-                <!-- TIER 3: SIGNATURE (Premium) -->
-                <div class="card-pro p-8 flex flex-col h-full bg-origen-navy text-white border-none" data-aos="fade-up" data-aos-delay="200">
+                <!-- TIER 3: SIGNATURE -->
+                <div class="card-pro scaling-card signature p-8 flex flex-col h-full bg-origen-navy text-white border-none" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="text-2xl font-bold text-white mb-2 serif-title">Signature</h3>
                     <p class="text-xs text-gray-400 uppercase tracking-widest mb-6">Autoridad de Mercado</p>
                     <div class="mb-8 pb-8 border-b border-white/10">
@@ -547,7 +507,6 @@
                         <li class="flex items-center gap-3"><i class="fa-solid fa-check text-white"></i> <span>Publicación Programada</span></li>
                     </ul>
                 </div>
-
             </div>
         </div>
     </section>
@@ -559,7 +518,6 @@
                 <span class="text-origen-gold font-bold uppercase tracking-widest text-xs mb-2 block">Workflow Técnico</span>
                 <h2 class="text-3xl font-bold text-origen-navy serif-title">Metodología "Edición Fugaz"</h2>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="card-pro p-6 border-l-4 border-l-origen-gold">
                     <div class="text-xs font-bold text-gray-400 mb-2">01</div>
@@ -586,73 +544,45 @@
     </section>
 
     <!-- 7. TEAM OVERLAY (MENU APARTE) -->
-    <div id="teamOverlay" class="fixed inset-0 z-50 bg-white/98 backdrop-blur-xl transform translate-y-full transition-transform duration-500 ease-in-out flex flex-col overflow-hidden">
-        
-        <!-- Header -->
-        <div class="container mx-auto px-6 py-8 flex justify-between items-center bg-white/80 border-b border-gray-100">
+    <div id="teamOverlay" class="fixed inset-0 z-50 bg-white w-full h-full transform translate-y-full transition-transform duration-300 ease-out flex flex-col overflow-hidden">
+        <div class="container mx-auto px-6 py-8 flex justify-between items-center bg-white border-b border-gray-100">
             <h2 class="text-2xl md:text-4xl font-bold text-origen-navy serif-title">Original Humans</h2>
-            <button onclick="closeTeamOverlay()" class="w-10 h-10 rounded-full bg-origen-light flex items-center justify-center text-origen-navy hover:bg-origen-navy hover:text-white transition-all text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <button onclick="closeTeamOverlay()" class="w-10 h-10 rounded-full bg-origen-light flex items-center justify-center text-origen-navy hover:bg-origen-navy hover:text-white transition-all text-xl"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        
-        <!-- Scrollable Content -->
         <div class="flex-1 overflow-y-auto pb-20 pt-10">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <p class="text-gray-500 mt-2">Un equipo híbrido donde el talento humano potencia a la tecnología.</p>
                     <p class="text-xs text-origen-gold font-bold uppercase mt-4 animate-bounce">Click en las tarjetas para más detalle</p>
                 </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
-                     
-                     <!-- Harold (CEO) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
                      <div onclick="openModal('harold')" class="team-card group bg-origen-navy p-6 rounded-xl shadow-xl border-2 border-transparent hover:border-origen-gold relative overflow-hidden cursor-pointer h-full flex flex-col items-center justify-center">
-                         <div class="w-24 h-24 mx-auto bg-origen-gold rounded-full flex items-center justify-center text-white text-4xl mb-4">
-                            <i class="fa-solid fa-crown"></i>
-                         </div>
+                         <div class="w-24 h-24 mx-auto bg-origen-gold rounded-full flex items-center justify-center text-white text-4xl mb-4"><i class="fa-solid fa-crown"></i></div>
                          <h4 class="font-bold text-white text-lg text-center">Harold Huerta</h4>
-                         <span class="text-xs text-origen-gold uppercase tracking-wider block mt-1 text-center">CEO & Director Visión</span>
+                         <span class="text-xs text-origen-gold uppercase tracking-wider block mt-1 text-center">Fundador, CEO & Dir. Creativo</span>
+                         <div class="mt-4 text-white/50 text-xs uppercase tracking-widest group-hover:text-white transition-colors flex items-center gap-1"><i class="fa-brands fa-whatsapp"></i> Contactar</div>
                      </div>
-
-                     <!-- Natalia (PR) -->
                      <div onclick="openModal('natalia')" class="team-card group bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:border-origen-gold relative overflow-hidden cursor-pointer h-full flex flex-col items-center justify-center">
-                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4 group-hover:bg-origen-light transition-colors">
-                            <i class="fa-regular fa-user"></i>
-                         </div>
+                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4 group-hover:bg-origen-light transition-colors"><i class="fa-regular fa-user"></i></div>
                          <h4 class="font-bold text-origen-navy text-center">Natalia Guzmán</h4>
-                         <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">VP Relaciones Públicas</span>
+                         <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">Vicepresidenta & Dir. Com. Estratégica</span>
                      </div>
-
-                     <!-- Arturo (Prod) -->
                      <div onclick="openModal('arturo')" class="team-card group bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:border-origen-gold relative overflow-hidden cursor-pointer h-full flex flex-col items-center justify-center">
-                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4 group-hover:bg-origen-light transition-colors">
-                            <i class="fa-solid fa-video"></i>
-                         </div>
+                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4 group-hover:bg-origen-light transition-colors"><i class="fa-solid fa-video"></i></div>
                          <h4 class="font-bold text-origen-navy text-center">Arturo Castañeda</h4>
                          <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">Dirección Producción</span>
                      </div>
-
-                     <!-- Valeria (Insight) -->
                      <div onclick="openModal('valeria')" class="team-card group bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:border-origen-gold relative overflow-hidden cursor-pointer h-full flex flex-col items-center justify-center">
-                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                         </div>
+                         <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-origen-navy text-3xl mb-4"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                          <h4 class="font-bold text-origen-navy text-center">Valeria Melo</h4>
-                         <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">Investigación</span>
+                         <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">Stylish, Casting y Producción</span>
                      </div>
-
-                     <!-- Andrés (Post) -->
                      <div onclick="openModal('andres')" class="team-card group bg-white p-6 rounded-xl shadow-lg border-2 border-origen-navy/10 hover:border-origen-navy relative overflow-hidden cursor-pointer h-full flex flex-col items-center justify-center">
-                         <div class="w-20 h-20 mx-auto bg-origen-navy rounded-full flex items-center justify-center text-white text-3xl mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-laptop-code"></i>
-                         </div>
+                         <div class="w-20 h-20 mx-auto bg-origen-navy rounded-full flex items-center justify-center text-white text-3xl mb-4 group-hover:scale-110 transition-transform"><i class="fa-solid fa-laptop-code"></i></div>
                          <h4 class="font-bold text-origen-navy text-center">Andrés David</h4>
                          <span class="text-xs text-gray-500 uppercase tracking-wider block mt-1 text-center">Postproducción</span>
                      </div>
                 </div>
-
-                <!-- Principio Final -->
                 <div class="max-w-3xl mx-auto mt-20 text-center border-t border-gray-200 pt-12">
                     <h4 class="text-origen-navy font-bold text-xl mb-4 serif-title">Principio Final</h4>
                     <p class="text-gray-600 mb-2">En Origen Media: El talento se cuida. Las ideas se respetan.</p>
@@ -662,43 +592,28 @@
         </div>
     </div>
 
-    <!-- MODAL STRUCTURE (DETALLES DEL EQUIPO) -->
+    <!-- MODAL (DETALLES DEL EQUIPO) -->
     <div id="teamModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
-        <!-- Overlay -->
         <div class="absolute inset-0 modal-overlay" onclick="closeModal()"></div>
-        
-        <!-- Modal Content -->
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative z-10 overflow-hidden transform transition-all scale-95 opacity-0" id="modalContent">
-            <!-- Header with Pattern -->
-            <div class="bg-origen-navy p-6 md:p-8 relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] relative z-10 overflow-hidden transform transition-all scale-95 opacity-0 flex flex-col" id="modalContent">
+            <div class="bg-origen-navy p-6 md:p-8 relative overflow-hidden flex-shrink-0">
                 <div class="absolute top-0 right-0 w-40 h-40 bg-origen-gold/20 rounded-full blur-3xl transform translate-x-10 -translate-y-10"></div>
-                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/50 hover:text-white transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
+                <button onclick="closeModal()" class="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
                 <div class="relative z-10">
                     <span id="modalRole" class="text-origen-gold text-xs font-bold uppercase tracking-widest mb-2 block">Role</span>
                     <h3 id="modalName" class="text-3xl md:text-4xl font-bold text-white serif-title">Name</h3>
                 </div>
             </div>
-            
-            <!-- Body -->
-            <div class="p-6 md:p-8 bg-white max-h-[60vh] overflow-y-auto">
+            <div class="p-6 md:p-8 bg-white overflow-y-auto flex-grow">
                 <div class="mb-8">
-                    <h4 class="text-origen-navy font-bold text-lg mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-bullseye text-origen-gold"></i> Rol Cultural
-                    </h4>
-                    <ul id="modalTasks" class="space-y-3 text-sm text-gray-600 cultural-role-list">
-                        <!-- Tasks injected via JS -->
-                    </ul>
+                    <h4 class="text-origen-navy font-bold text-lg mb-3 flex items-center gap-2"><i class="fa-solid fa-bullseye text-origen-gold"></i> Rol Cultural</h4>
+                    <ul id="modalTasks" class="space-y-3 text-sm text-gray-600 cultural-role-list"></ul>
                 </div>
-                
                 <div class="mt-6 border-t border-gray-100 pt-6">
                      <p id="modalSlogan" class="text-origen-navy font-bold italic text-center text-lg"></p>
                 </div>
             </div>
-
-            <!-- Footer (CTA) -->
-            <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-end">
+            <div class="p-6 bg-gray-50 border-t border-gray-100 flex justify-end flex-shrink-0">
                 <a id="modalWhatsapp" href="#" target="_blank" class="px-6 py-3 bg-origen-whatsapp text-white font-bold rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                     <i class="fa-brands fa-whatsapp text-xl"></i> Contactar Directamente
                 </a>
@@ -711,7 +626,7 @@
         <div class="container mx-auto px-6 text-center">
             <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
                 <div class="uppercase tracking-widest font-bold text-white mb-4 md:mb-0">Origen Media</div>
-                <div>&copy; 2026. Documento Estratégico Confidencial.</div>
+                <div>&copy; 2026. Creado por Andrés David García Huerta. Todos los derechos reservados.</div>
             </div>
         </div>
     </footer>
@@ -719,49 +634,37 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true,
-            offset: 80,
-            duration: 800
-        });
+        AOS.init({ once: true, offset: 80, duration: 800 });
 
-        // --- OVERLAY LOGIC ---
+        // Overlay Logic
         function openTeamOverlay() {
             const overlay = document.getElementById('teamOverlay');
             overlay.classList.remove('translate-y-full');
             overlay.classList.add('translate-y-0');
-            // Disable body scroll
             document.body.style.overflow = 'hidden';
         }
-
         function closeTeamOverlay() {
             const overlay = document.getElementById('teamOverlay');
             overlay.classList.remove('translate-y-0');
             overlay.classList.add('translate-y-full');
-            // Enable body scroll
             document.body.style.overflow = 'auto';
         }
 
-        // --- HIGHLIGHT TEXT LOGIC ---
+        // Highlights
         function highlightText(id, colorClass) {
-            const element = document.getElementById('span-' + id);
-            if(element) {
-                element.className = `transition-all duration-300 transform scale-105 inline-block ${colorClass} font-bold`;
-            }
+            const el = document.getElementById('span-' + id);
+            if(el) el.className = `transition-all duration-300 transform scale-105 inline-block ${colorClass} font-bold`;
         }
-
         function resetText(id) {
-            const element = document.getElementById('span-' + id);
-            if(element) {
-                element.className = "transition-all duration-300 p-1 rounded";
-            }
+            const el = document.getElementById('span-' + id);
+            if(el) el.className = "transition-all duration-300 p-1 rounded";
         }
 
-        // --- TEAM DATA OBJECT ---
+        // Data
         const teamData = {
             harold: {
                 name: "Harold Huerta",
-                role: "CEO & Director de Visión y Causa",
+                role: "Fundador Origen Media\nCEO & Director Creativo",
                 slogan: "Guardián del origen, no jefe de tareas.",
                 tasks: [
                     "Define el porqué de cada proyecto.",
@@ -773,7 +676,7 @@
             },
             natalia: {
                 name: "Natalia Guzmán",
-                role: "VP de Relaciones Humanas & Com. Estratégica",
+                role: "Vicepresidenta de Origen Media & Directora de Comunicación Estratégica",
                 slogan: "Las relaciones públicas como relaciones humanas.",
                 tasks: [
                     "Construye reputación desde el origen.",
@@ -781,47 +684,49 @@
                     "Sostiene vínculos con medios, aliados, líderes e influenciadores.",
                     "Protege la coherencia entre lo que la marca dice y lo que hace."
                 ],
-                phone: "5215523421908"
+                phone: ""
             },
             arturo: {
                 name: "Arturo Castañeda",
-                role: "Dirección de Producción & Contenido",
-                slogan: "No producir por llenar feeds.",
+                role: "Dirección de Producción & Operativa",
+                slogan: "Ejecución Directa y Operativa.",
                 tasks: [
-                    "Materializar ideas con intención.",
-                    "Priorizar calidad, narrativa y contexto.",
-                    "Respetar tiempos reales de creación.",
-                    "Producir contenido que tenga sentido antes que volumen."
+                    "<strong>Sets de Grabación:</strong> Construcción y \"dressing\" de 3 espacios de rodaje.",
+                    "<strong>Logística:</strong> Negociación con proveedores para reducir costos de material.",
+                    "<strong>Producción para Post:</strong> Planificación de tiros enfocada en la eficiencia de edición.",
+                    "<strong>E-commerce & Gráficos:</strong> Alta de cuenta en TikTok Shop e integración de overlays.",
+                    "<strong>Ingeniería de Audio:</strong> Acondicionamiento acústico (insonorización) del set de cocina.",
+                    "<strong>Control de Calidad:</strong> Revisión final y seguimiento de Reels y Stories en plataformas."
                 ],
-                phone: "5215544603484"
+                phone: ""
             },
             valeria: {
                 name: "Valeria Melo",
-                role: "Investigación, Insight & Contexto",
-                slogan: "Sin investigación no hay estrategia.",
+                role: "Stylish, Casting y Producción",
+                slogan: "Estética y talento en sintonía.",
                 tasks: [
-                    "Escuchar antes de proponer.",
-                    "Analizar personas, no solo data.",
-                    "Interpretar comentarios como voces, no métricas.",
-                    "Detectar problemas reales y oportunidades humanas."
+                    "<strong>Stylish & Vestuario:</strong> Curaduría de imagen, outfits y estética visual para cada rodaje, asegurando coherencia con la marca.",
+                    "<strong>Casting de Talento:</strong> Búsqueda, selección y gestión de actores/modelos que representen la voz humana de Freshbox.",
+                    "<strong>Producción en Set:</strong> Coordinación logística durante el rodaje, asistencia de dirección y cuidado del detalle en escena.",
+                    "<strong>Dirección de Arte:</strong> Supervisión de props y ambientación para mantener el 'Cinema Look'."
                 ],
-                phone: "" 
+                phone: ""
             },
             andres: {
                 name: "Andrés David",
                 role: "Postproducción & Narrativa Visual",
-                slogan: "La edición también comunica valores.",
+                slogan: "Ingeniería visual para retención.",
                 tasks: [
-                    "Dar coherencia estética y narrativa.",
-                    "Cuidar el detalle como parte del mensaje.",
-                    "Convertir ideas en piezas claras, humanas y memorables.",
-                    "Motion graphics y ritmo narrativo."
+                    "<strong>Edición de Reels (Ritmo):</strong> Cortes dinámicos sincronizados con música y SFX para maximizar la retención de audiencia.",
+                    "<strong>Color Grading (LUTs):</strong> Aplicación de colorimetría cinematográfica, corrección de pieles y estilizado visual.",
+                    "<strong>Composición & Keyframes:</strong> Uso de reencuadre (Reframing), estabilización y animación de movimiento suave.",
+                    "<strong>Herramientas Avanzadas:</strong> Rotoscopia, máscaras y limpieza de ruido visual.",
+                    "<strong>Diseño Sonoro:</strong> Mezcla de audio inmersiva, efectos de sonido y limpieza de voz."
                 ],
-                phone: "5215632184700"
+                phone: ""
             }
         };
 
-        // --- MODAL LOGIC ---
         const modal = document.getElementById('teamModal');
         const modalContent = document.getElementById('modalContent');
         const modalName = document.getElementById('modalName');
@@ -830,32 +735,26 @@
         const modalSlogan = document.getElementById('modalSlogan');
         const modalWhatsapp = document.getElementById('modalWhatsapp');
 
-        function openModal(memberKey) {
-            const member = teamData[memberKey];
+        function openModal(key) {
+            const member = teamData[key];
             if (!member) return;
-
-            // Populate Data
             modalName.innerText = member.name;
             modalRole.innerText = member.role;
             modalSlogan.innerText = `👉 ${member.slogan}`;
-            
-            // Clear and Populate Tasks
             modalTasks.innerHTML = '';
-            member.tasks.forEach(task => {
+            member.tasks.forEach(t => {
                 const li = document.createElement('li');
-                li.innerHTML = `<span>${task}</span>`;
+                li.innerHTML = `<span>${t}</span>`;
                 modalTasks.appendChild(li);
             });
-
-            // Update Whatsapp Link
+            
             if (member.phone) {
                 modalWhatsapp.href = `https://wa.me/${member.phone}?text=Hola%20${member.name.split(' ')[0]},%20vi%20tu%20perfil%20en%20el%20deck%20de%20Origen%20Media.`;
-                modalWhatsapp.style.display = 'flex';
+                modalWhatsapp.parentElement.style.display = 'flex';
             } else {
-                modalWhatsapp.style.display = 'none';
+                modalWhatsapp.parentElement.style.display = 'none';
             }
 
-            // Show Modal
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
